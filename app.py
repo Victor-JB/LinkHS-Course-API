@@ -19,6 +19,9 @@ import traceback
 # codeacademy import
 from codeacademy_search import find_codeacademy_courses
 
+# coursera import
+from coursera_search import search_coursera
+
 app = Flask(__name__)
 
 # ---------------------------------------------------------------------------- #
@@ -26,7 +29,6 @@ app = Flask(__name__)
 def search():
 
     keywords = request.args.get('keywords')
-    location = request.args.get('location')
     pageNum = request.args.get('page')
     FETCH_ALL_JOBS = False
 
@@ -51,10 +53,18 @@ def search():
         codeacademy_courses = {'error': "Error Code 1: No keywords given; remember to use 'keywords' as your search parameter"}
         num_codeacademy_courses = 0
 
-    total_courses = num_codeacademy_courses
+    coursera_courses_full = search_coursera(keywords)
+    if 'error' not in coursera_courses_full:
+        coursera_courses = coursera_courses_full['Ad']
+        num_coursera_courses = len(coursera_courses)
+
+    else:
+        num_coursera_courses = 0
+
+    total_courses = num_codeacademy_courses + num_coursera_courses
 
     print("\nTotal courses:", total_courses)
-    jobs = {'coursera courses': 'coursera_courses', 'codeacademy jobs': codeacademy_courses, 'total hits': f'{total_courses}'}
+    jobs = {'coursera courses': coursera_courses, 'codeacademy jobs': codeacademy_courses, 'total hits': f'{total_courses}'}
 
     response = json.dumps(jobs, indent=4)
 

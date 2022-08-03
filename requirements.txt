@@ -46,4 +46,5 @@ urllib3==1.26.11
 webdriver-manager==3.8.3
 Werkzeug==2.2.0
 wsproto==1.1.0
+xmltodict==0.13.0
 zipp==3.8.1

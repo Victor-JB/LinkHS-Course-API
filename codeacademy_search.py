@@ -33,9 +33,14 @@ def find_codeacademy_courses(search_terms):
         options.add_argument('--headless')
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--no-sandbox")
+
         # service = ChromeService(executable_path = ChromeDriverManager().install())
         driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
+        print('\nDriver has been instantiated successfully')
     except Exception as e:
+        if 'driver' in locals():
+            driver.quit()
+            print('Driver has been closed successfully')
         traceback.print_exc()
         return {'error': f'Error Code 2: Failed to initialize webdriver, given keywords={search_terms}'}
 
@@ -50,6 +55,8 @@ def find_codeacademy_courses(search_terms):
             EC.presence_of_element_located((By.TAG_NAME, "ol")))
     except Exception as e:
         traceback.print_exc()
+        driver.quit()
+        print('Driver has been closed successfully')
         return {'error': f'Error Code 3: Failed to load (retrieve) webpage, given keywords={search_terms}'}
 
     # find courses
@@ -65,11 +72,14 @@ def find_codeacademy_courses(search_terms):
         # add course details to list
         course_list.append({'title': title, 'description': description, 'url': url})
 
+    print('Success!')
+    driver.quit()
+    print('\nDriver has been closed successfully')
     return course_list
 
 # ---------------------------------------------------------------------------- #
 if __name__ == "__main__":
 
-    search_terms = "dfkjghsldfkgh"
+    search_terms = "python ml"
     course_list = find_courses(search_terms)
     print("Found len(course_list)) courses matching", search_terms)
