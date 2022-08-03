@@ -37,13 +37,18 @@ def search():
         FETCH_ALL_JOBS = True
     """
 
-    # Codeacademy Courses
-    codeacademy_courses = find_codeacademy_courses(keywords)
-    if type(codeacademy_courses) is list:
-        num_codeacademy_courses = len(codeacademy_courses)
-        print("Num Codeacademy courses:", num_codeacademy_courses)
+    if keywords is not None:
+        # Codeacademy Courses
+        codeacademy_courses = find_codeacademy_courses(keywords)
+        if type(codeacademy_courses) is list:
+            num_codeacademy_courses = len(codeacademy_courses)
+            print("Num Codeacademy courses:", num_codeacademy_courses)
+
+        else:
+            num_codeacademy_courses = 0
 
     else:
+        codeacademy_courses = {'error': "Error Code 1: No keywords given; remember to use 'keywords' as your search parameter"}
         num_codeacademy_courses = 0
 
     total_courses = num_codeacademy_courses
