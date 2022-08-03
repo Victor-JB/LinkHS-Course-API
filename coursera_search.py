@@ -32,11 +32,13 @@ def search_coursera(search_terms, pageNum):
     pUrl = f"https://api.impact.com/Mediapartners/<AccountSID>/Catalogs/ItemSearch?PageSize=200&Keyword={search_terms}"
 
     # searching for specific page if pageNum is given
-    if pageNum and pageNum > 1:
-        print("\nPage number given:", pageNum)
-        url += f"&Page={pageNum}"
-        pUrl += f"&Page={pageNum}"
-    else:
+    try:
+        pageNum = int(pageNum)
+        if pageNum > 1:
+            print("\nPage number given:", pageNum)
+            url += f"&Page={pageNum}"
+            pUrl += f"&Page={pageNum}"
+    except:
         pageNum = 1
 
     print(f"Hitting '{pUrl}' for coursera courses...")
@@ -74,8 +76,8 @@ def search_coursera(search_terms, pageNum):
 # ---------------------------------------------------------------------------- #
 if __name__ == "__main__":
 
-    search_terms = "cooking"
-    coursera_response = search_coursera(search_terms, None)
+    search_terms = "python"
+    coursera_response = search_coursera(search_terms, '2')
     print(coursera_response)
 
     if 'error' not in coursera_response:
