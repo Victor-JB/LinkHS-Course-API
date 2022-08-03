@@ -15,15 +15,12 @@ import os
 # for time-keeping and debugging
 import time
 
-account_sid = 'IR7FdTDStn9y3560855gpgkhPoZX8TtgX1'
-auth_token = 'kPsxR-WH9hiSbhmeF-CcXmNxQPK6iuEk'
-
 # ---------------------------------------------------------------------------- #
 def search_coursera(search_terms, pageNum):
 
     # credentials
-    # account_sid = os.getenv('ACCOUNT_SID')
-    # auth_token = os.getenv('COURSERA_AUTH_TOKEN')
+    account_sid = os.getenv('ACCOUNT_SID')
+    auth_token = os.getenv('COURSERA_AUTH_TOKEN')
 
     start = time.time()
 
