@@ -13,11 +13,16 @@ import traceback
 # .env handling
 import os
 
+# for time-keeping and debugging
+import time
+
 # ---------------------------------------------------------------------------- #
 def find_codeacademy_courses(search_terms):
 
     # initialize list
     course_list = []
+
+    start = time.time()
 
     # construct url
     base_url = "https://www.codecademy.com/search?query="
@@ -72,7 +77,7 @@ def find_codeacademy_courses(search_terms):
         # add course details to list
         course_list.append({'title': title, 'description': description, 'url': url})
 
-    print('Success!')
+    print('Success! Finished in', time.time() - start, 'seconds')
     driver.quit()
     print('\nDriver has been closed successfully')
     return course_list

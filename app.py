@@ -53,9 +53,10 @@ def search():
         codeacademy_courses = {'error': "Error Code 1: No keywords given; remember to use 'keywords' as your search parameter"}
         num_codeacademy_courses = 0
 
-    coursera_courses_full = search_coursera(keywords)
-    if 'error' not in coursera_courses_full:
-        coursera_courses = coursera_courses_full['Ad']
+    # Coursera courses
+    coursera_response = search_coursera(keywords, pageNum)
+    if 'error' not in coursera_response:
+        coursera_courses = coursera_response['Item']
         num_coursera_courses = len(coursera_courses)
 
     else:
