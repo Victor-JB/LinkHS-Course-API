@@ -10,6 +10,9 @@ from selenium.webdriver.support import expected_conditions as EC
 # error handling import
 import traceback
 
+# .env handling
+import os
+
 # ---------------------------------------------------------------------------- #
 def find_codeacademy_courses(search_terms):
 
@@ -26,37 +29,41 @@ def find_codeacademy_courses(search_terms):
     try:
         # initialize webdriver
         options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        service = ChromeService(executable_path = ChromeDriverManager().install())
+        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        options.add_argument('--headless')
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
+        # service = ChromeService(executable_path = ChromeDriverManager().install())
+        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
     except Exception as e:
         traceback.print_exc()
-        return {'error': f'Error Code 2: Failed to initialize webdriver, given loc={location}, keywords={keywords}, pageNum={pageNum}'}
+        return {'error': f'Error Code 2: Failed to initialize webdriver, given keywords={search_terms}'}
 
-    with webdriver.Chrome(service = service, options = options) as driver:
+    # with webdriver.Chrome(service = service, options = options) as driver:
 
-        try:
-            # load webpage
-            driver.get(full_url)
+    try:
+        # load webpage
+        driver.get(full_url)
 
-            # wait until results are loaded
-            results_list = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.TAG_NAME, "ol")))
-        except Exception as e:
-            traceback.print_exc()
-            return {'error': f'Error Code 3: Failed to load (retrieve) webpage, given keywords={search_terms}'}
+        # wait until results are loaded
+        results_list = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.TAG_NAME, "ol")))
+    except Exception as e:
+        traceback.print_exc()
+        return {'error': f'Error Code 3: Failed to load (retrieve) webpage, given keywords={search_terms}'}
 
-        # find courses
-        courses = results_list.find_elements(By.TAG_NAME, 'li')
-        print("\nParsing results...")
-        for course in courses:
+    # find courses
+    courses = results_list.find_elements(By.TAG_NAME, 'li')
+    print("\nParsing results...")
+    for course in courses:
 
-            # extract details
-            url = course.find_element(By.TAG_NAME, 'a').get_attribute("href")
-            title = course.find_element(By.TAG_NAME, 'h3').text
-            description = course.find_element(By.XPATH, "a/div/div/span[2]").text
+        # extract details
+        url = course.find_element(By.TAG_NAME, 'a').get_attribute("href")
+        title = course.find_element(By.TAG_NAME, 'h3').text
+        description = course.find_element(By.XPATH, "a/div/div/span[2]").text
 
-            # add course details to list
-            course_list.append({'title': title, 'description': description, 'url': url})
+        # add course details to list
+        course_list.append({'title': title, 'description': description, 'url': url})
 
     return course_list
 
