@@ -60,6 +60,7 @@ def search():
         num_coursera_courses = len(coursera_courses)
 
     else:
+        coursera_response = coursera_courses
         num_coursera_courses = 0
 
     total_courses = num_codeacademy_courses + num_coursera_courses
